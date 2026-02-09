@@ -1,0 +1,7 @@
+playwright
+asyncpg
+sqlalchemy
+alembic
+psycopg2
+dotenv
+openpyxl
