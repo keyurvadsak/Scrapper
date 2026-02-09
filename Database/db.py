@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from config import DATABASE_URL
 
-DATABASE_URL = "postgresql+asyncpg://postgres:keyur6634@localhost:5432/Scrapping"
 
 engine = create_async_engine(DATABASE_URL)
 AsyncSessionLocal = sessionmaker(
