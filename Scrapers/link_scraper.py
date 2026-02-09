@@ -138,6 +138,9 @@ async def scrape_links(base_url, tags):
             )
             for _ in range(WORKERS)
         ]
+        
+        
+        
 
         await queue.join()
 
