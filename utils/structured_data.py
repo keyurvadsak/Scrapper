@@ -28,6 +28,7 @@ TAG_COLORS = {
     'img': 'C55A5A',             # Red (Image)
     'video': '9DC183',           # Green (Video)
     'audio': '9B7FB5',           # Purple (Audio)
+    'overview': '38cb82',          # Light green (Overview)
 }
 
 TAG_LABELS = {
@@ -94,17 +95,26 @@ def create_overview_sheet(ws, website_name, website_url, pages_data):
     apply_header_style(ws['A2'], TAG_COLORS['page_info'])
     apply_data_style(ws['B1'])
     apply_data_style(ws['B2'])
+
+    ws['A4'] = 'Click on page name to view details'
+    apply_header_style(ws['A4'], TAG_COLORS['overview'])
     
     # Page index table
-    ws['A4'] = 'Page Name'
-    ws['B4'] = 'Page URL'
+    ws['A6'] = 'Page Name'
+    ws['B6'] = 'Page URL'
     
-    apply_header_style(ws['A4'], TAG_COLORS['page_info'])
-    apply_header_style(ws['B4'], TAG_COLORS['page_info'])
+    apply_header_style(ws['A6'], TAG_COLORS['th'])
+    apply_header_style(ws['B6'], TAG_COLORS['th'])
     
     # Add page data
-    for idx, page in enumerate(pages_data, start=5):
-        ws[f'A{idx}'] = f"page_{idx-4}"
+    for idx, page in enumerate(pages_data, start=7):
+        page_number = idx - 4
+        sheet_name = f"Page_{page_number}"
+        # ws[f'A{idx}'] = f"page_{idx-4}"
+        cell = ws[f'A{idx}']
+        cell.value = f"page_{page_number}"
+        cell.hyperlink = f"#'{sheet_name}'!A1"
+        cell.style = "Hyperlink"
         ws[f'B{idx}'] = page['url']
         apply_data_style(ws[f'A{idx}'])
         apply_data_style(ws[f'B{idx}'])
@@ -126,20 +136,32 @@ def create_page_sheet(ws, page_name, page_url, tags_data):
         page_url: URL of the page
         tags_data: Dictionary of tag data from database
     """
-    current_row = 1
+    # current_row = 1
+
+    
+    ws['A1'] = "← Back to Overview"
+    ws['A1'].hyperlink = "#'Overview'!A1"
+    ws['A1'].style = "Hyperlink"
+
+    ws.merge_cells('A1:A1')
+    ws['A1'].alignment = Alignment(horizontal='left', vertical='center')
+    apply_header_style(ws['A1'], TAG_COLORS['overview'])
+
     
     # Page info section
-    ws['A1'] = 'Page Name'
-    ws['B1'] = page_name
-    ws['A2'] = 'Page URL'
-    ws['B2'] = page_url
+    ws['A3'] = 'Page Name'
+    ws['B3'] = page_name
+    ws['A4'] = 'Page URL'
+    ws['B4'] = page_url
+    # current_row = 5
     
-    apply_header_style(ws['A1'], TAG_COLORS['page_info'])
-    apply_header_style(ws['A2'], TAG_COLORS['page_info'])
-    apply_data_style(ws['B1'])
-    apply_data_style(ws['B2'])
+    apply_header_style(ws['A3'], TAG_COLORS['page_info'])
+    apply_header_style(ws['A4'], TAG_COLORS['page_info'])
+    apply_data_style(ws['B3'])
+    apply_data_style(ws['B4'])
+
     
-    current_row = 4
+    current_row = 6
     
     # Process each tag type
     tag_order = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'li', 'th', 'td', 'a', 'img', 'video', 'audio']
